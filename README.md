@@ -1,6 +1,6 @@
 # Biblioteca · API y sitio web
 
-Base **Next.js 16** (App Router) adaptada para la asignatura *Desarrollo Móvil* (Unidad 03). Estado D00, 17/10/2026: avance independiente de D01 con catálogo y autenticación incorporados; pruebas locales con dobles Firebase. Integración con Firebase propio pendiente en D01; validación completa de Guía 1 en D02. Las funciones presentes en el código no se consideran verificadas por existir.
+Base **Next.js 16** (App Router) adaptada para la asignatura *Desarrollo Móvil* (Unidad 03). Estado D01, 18/10/2026: catálogo y autenticación verificados con Firebase propio `biblioteca-aiden-2026`. Pasaron 27 comprobaciones reales, incluidas 14 peticiones HTTP. Préstamos, portadas, web completa por rol y publicación Vercel siguen pendientes de D02. Las funciones presentes en el código no se consideran verificadas por existir.
 
 1. **API REST** (`/api/...`) prevista para la app móvil Expo, que tendrá un repositorio independiente.
 2. **Sitio web** con las mismas funcionalidades que la app (estudiante y bibliotecario).
@@ -56,6 +56,8 @@ pnpm create-user -- bibliotecario@tucorreo.com "TuClave" "Tu Nombre" librarian
 `seed` sin `--reset` conserva libros existentes; `seed -- --reset` puede alterar inventario. `smoke` crea y borra datos temporales, y `reset-demo` es destructivo. Revisar los scripts y el destino antes de ejecutarlos. D01 no ejecutó ninguno contra Firebase.
 
 ## Verificación local anticipada de D01 en D00
+
+**Integración real D01, 18/10:** registro201 con student, login200, refresh200, me200 (incluido token renovado), catálogo200 con diez libros, búsqueda/detalle200, privados sin token401, credenciales incorrectas/refresh inválido401 y libro ausente404. Se comprobó persistencia users y que role=librarian en registro no otorga ese rol. Seed sin reset se ejecutó dos veces:0→10→10 libros y segunda ejecución sin cambios en ningún documento. Hay una cuenta técnica student de prueba; los accesos principales de evaluación aún se prepararán en D02. Credenciales y evidencias privadas permanecen fuera de este repositorio.
 
 `pnpm typecheck`, `pnpm test`, `pnpm lint` y `pnpm build`: pasados. Vitest: 8 archivos y 50 pruebas, incluidos los controles docentes existentes de reglas, imagen y OpenAPI; sus resultados unitarios no validan las funciones D02 contra Firestore. Catálogo y auth tienen pruebas nuevas con fronteras simuladas. Ocho comprobaciones HTTP locales pasadas: login/registro servidos, catálogo/detalle/me sin token rechazados y cuerpos inválidos rechazados en login/registro/refresh. Firebase real, cuentas, sesión web completa, smoke y Vercel siguen pendientes. No se configuraron secretos ni una URL pública. Pasos del siguiente bloque en [CONFIGURACION_FIREBASE.md](CONFIGURACION_FIREBASE.md).
 

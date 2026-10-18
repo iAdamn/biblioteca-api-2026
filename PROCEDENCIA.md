@@ -1,5 +1,9 @@
 # Procedencia y adaptación
 
+## Integración propia D01 del 18 de octubre
+
+Se configuró Firebase exclusivo biblioteca-aiden-2026 y se verificó Auth/Firestore con 27 controles dirigidos, 14 HTTP. No cambió código de producción, dependencias ni lockfile respecto a la base adaptada. Se reutilizaron scripts y rutas existentes, incluida siembra sin reset dos veces. Se actualizaron README y CONFIGURACION_FIREBASE con resultados reales; el JSON de servicio, .env y credenciales técnicas están fuera de Git. Préstamos, portadas y web completa siguen pendientes D02. Helpers/evidencias/Word del estudiante viven fuera del repositorio conforme a la organización del paquete.
+
 Base autorizada: [library-api de Justo Jasmany Jaramillo Olarte](https://github.com/justojaramillo/library-api).
 Revisión conservada: `1870eaddf1cf248c4e74d7d69bb8aa59e6fe94ae`, recuperada durante la preparación del 17/10/2026.
 
