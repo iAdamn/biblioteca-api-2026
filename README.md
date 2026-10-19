@@ -1,6 +1,6 @@
 # Biblioteca · API y sitio web
 
-Base **Next.js 16** (App Router) adaptada para la asignatura *Desarrollo Móvil* (Unidad 03). Estado D02, 19/10/2026: Firebase propio biblioteca-aiden-2026. Integración de préstamos, transacciones, permisos, idempotencia, catálogo incremental, portadas y OpenAPI: 50/50 controles reales y 47 HTTP. Calidad: 52 tests, tipos, lint y build correctos. Web y despliegue: resultados actualizados al cierre de D02. La app móvil corresponde a un bloque posterior.
+Base **Next.js 16** (App Router) adaptada para la asignatura *Desarrollo Móvil* (Unidad 03). Estado D02, 19/10/2026: Firebase propio biblioteca-aiden-2026. Integración de préstamos, transacciones, permisos, idempotencia, catálogo incremental, portadas y OpenAPI: 50/50 controles reales y 47 HTTP. Calidad: 52 tests, tipos, lint y build correctos. Web: 19 comprobaciones de navegador. Producción verificada en https://biblioteca-api-2026.vercel.app: 50/50 controles de integración (47 HTTP) y 9/9 de cuentas principales (8 HTTP). La app móvil corresponde a un bloque posterior.
 
 1. **API REST** (`/api/...`) prevista para la app móvil Expo, que tendrá un repositorio independiente.
 2. **Sitio web** con las mismas funcionalidades que la app (estudiante y bibliotecario).
@@ -53,13 +53,13 @@ pnpm create-user -- bibliotecario@tucorreo.com "TuClave" "Tu Nombre" librarian
 | `pnpm smoke` | Prueba de humo contra Firebase real (41 comprobaciones; usa usuarios temporales y limpia todo lo que crea) |
 | `pnpm reset-demo` | Borra préstamos y portadas y restaura ejemplares |
 
-`seed` sin `--reset` conserva libros existentes; `seed -- --reset` puede alterar inventario. `smoke` también restaura inventario y elimina portadas de clean-code/rayuela; no usarlo sobre datos que se deban preservar. La integración D02 usa fixtures propias aisladas. `reset-demo` es destructivo. Revisar los scripts y el destino antes de ejecutarlos. D01 no ejecutó ninguno contra Firebase.
+`seed` sin `--reset` conserva libros existentes; `seed -- --reset` puede alterar inventario. `smoke` también restaura inventario y elimina portadas de clean-code/rayuela; no usarlo sobre datos que se deban preservar. La integración D02 usa fixtures propias aisladas. `reset-demo` es destructivo. Revisar los scripts y el destino antes de ejecutarlos. D01 ejecutó seed sin reset dos veces; smoke y reset-demo no se ejecutaron. D02 usó fixtures aisladas con comparación del catálogo original antes y después.
 
 ## Verificación local anticipada de D01 en D00
 
-**Integración real D01, 18/10:** registro201 con student, login200, refresh200, me200 (incluido token renovado), catálogo200 con diez libros, búsqueda/detalle200, privados sin token401, credenciales incorrectas/refresh inválido401 y libro ausente404. Se comprobó persistencia users y que role=librarian en registro no otorga ese rol. Seed sin reset se ejecutó dos veces:0→10→10 libros y segunda ejecución sin cambios en ningún documento. Hay una cuenta técnica student de prueba; los accesos principales de evaluación aún se prepararán en D02. Credenciales y evidencias privadas permanecen fuera de este repositorio.
+**Integración real D01, 18/10:** registro201 con student, login200, refresh200, me200 (incluido token renovado), catálogo200 con diez libros, búsqueda/detalle200, privados sin token401, credenciales incorrectas/refresh inválido401 y libro ausente404. Se comprobó persistencia users y que role=librarian en registro no otorga ese rol. Seed sin reset se ejecutó dos veces:0→10→10 libros y segunda ejecución sin cambios en ningún documento. Hay una cuenta técnica student histórica; D02 añadió dos accesos principales y verificó sus roles por API y web. Credenciales y evidencias privadas permanecen fuera de este repositorio.
 
-`pnpm typecheck`, `pnpm test`, `pnpm lint` y `pnpm build`: pasados. Vitest: 8 archivos y 50 pruebas, incluidos los controles docentes existentes de reglas, imagen y OpenAPI; sus resultados unitarios no validan las funciones D02 contra Firestore. Catálogo y auth tienen pruebas nuevas con fronteras simuladas. Ocho comprobaciones HTTP locales pasadas: login/registro servidos, catálogo/detalle/me sin token rechazados y cuerpos inválidos rechazados en login/registro/refresh. Firebase real, cuentas, sesión web completa, smoke y Vercel siguen pendientes. No se configuraron secretos ni una URL pública. Pasos del siguiente bloque en [CONFIGURACION_FIREBASE.md](CONFIGURACION_FIREBASE.md).
+`pnpm typecheck`, `pnpm test`, `pnpm lint` y `pnpm build`: pasados. Vitest: 8 archivos y 50 pruebas, incluidos los controles docentes existentes de reglas, imagen y OpenAPI; sus resultados unitarios no validan las funciones D02 contra Firestore. Catálogo y auth tienen pruebas nuevas con fronteras simuladas. Ocho comprobaciones HTTP locales pasadas: login/registro servidos, catálogo/detalle/me sin token rechazados y cuerpos inválidos rechazados en login/registro/refresh. Firebase real, cuentas, sesión web completa, smoke y Vercel siguen pendientes. En D00 no había secretos ni URL pública; D01 configuró Firebase propio y D02 publicó la URL indicada al inicio. Pasos del siguiente bloque en [CONFIGURACION_FIREBASE.md](CONFIGURACION_FIREBASE.md).
 
 ## Endpoints
 
@@ -92,3 +92,17 @@ PROCEDENCIA.md  revisión y diferencias respecto al material docente
 ```
 
 Notas de Next.js 16 que usa el proyecto: `proxy.ts` (antes *middleware*), `cacheComponents` (lo que depende de la petición se lee dentro de `<Suspense>`) y tipos `RouteContext`/`PageProps` generados con `next typegen`.
+
+## Despliegue propio verificado en D02
+
+Sitio y API: https://biblioteca-api-2026.vercel.app. Swagger: https://biblioteca-api-2026.vercel.app/api/docs. Proyecto biblioteca-api-2026 en el equipo Biblioteca Aiden, plan Hobby; Firebase biblioteca-aiden-2026, Spark. La integración GitHub está limitada a este repositorio.
+
+Variables de servidor en Vercel: FIREBASE_PROJECT_ID, FIREBASE_WEB_API_KEY, FIREBASE_CLIENT_EMAIL y FIREBASE_PRIVATE_KEY. Se configuraron como sensibles para Production/Preview; no usar NEXT_PUBLIC_*. La clave admite saltos de línea reales o barras n escapadas. No incluir secretos en vercel.json ni en el cliente.
+
+Recorrido: estudiante inicia sesión, abre un libro y solicita; bibliotecario entra a Gestión de préstamos y presta/rechaza o registra devolución. requested no reserva, approved descuenta y returned repone. La cookie web es HttpOnly/SameSite lax/Secure en producción. La API usa Bearer y refresh; los permisos se verifican en servidor.
+
+Para reproducir API: obtener tokens con POST /api/auth/login; enviar Authorization: Bearer <idToken> a GET /api/books y POST /api/loans con bookId y un clientRequestId estable. Repetir la misma intención devuelve el mismo préstamo (201 inicial,200 repetición). Un librarian usa PATCH /api/loans/<id> con action approve, reject o return. Ver esquemas/errores reales en OpenAPI; no copiar tokens a archivos versionados.
+
+Verificación pública: ciclo completo, competencia por el último ejemplar, devolución única, idempotencia simultánea/tardía,403 roles,404 ajenos,400/409, portadas y cursor. Las cuentas principales tienen login/me/rol/listas comprobados; contraseñas solo en la documentación privada de entrega. Pruebas locales:52 casos únicos, con15 afectados reejecutados al corregir prerender; tipos/lint/build correctos.
+
+Límites: validación de imagen por firma/tipo/tamaño, sin decodificación completa. El móvil no se desarrolló en D02. El repositorio se mantiene privado; el acceso docente se resolverá en el cierre de entrega.
