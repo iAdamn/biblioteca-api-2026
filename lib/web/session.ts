@@ -1,6 +1,7 @@
 import "server-only";
 import { cache } from "react";
 import { cookies } from "next/headers";
+import { connection } from "next/server";
 import { redirect } from "next/navigation";
 import { verifySessionCookie, SESSION_MAX_AGE_MS } from "../services/auth";
 import type { AuthUser, Role } from "../types";
@@ -23,6 +24,9 @@ export async function clearSessionCookie(): Promise<void> {
 
 /** Usuario de la sesión web o null. `cache` evita verificar la cookie varias veces por petición. */
 export const getWebUser = cache(async (): Promise<AuthUser | null> => {
+  // Firebase Admin consulta el reloj al verificar tokens. Esperar la petición real
+  // evita ejecutar esa verificación durante el prerender especulativo de Next.
+  await connection();
   const value = (await cookies()).get(SESSION_COOKIE)?.value;
   if (!value) return null;
   try {
