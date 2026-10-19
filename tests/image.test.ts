@@ -22,4 +22,8 @@ describe("sniffImageType", () => {
     expect(sniffImageType(new TextEncoder().encode("<html><script>alert(1)</script>"))).toBeNull();
     expect(sniffImageType(new Uint8Array())).toBeNull();
   });
+
+  it("rechaza una firma PNG parcial seguida por contenido arbitrario", () => {
+    expect(sniffImageType(bytes(0x89, 0x50, 0x4e, 0x47, 0, 0, 0, 0))).toBeNull();
+  });
 });

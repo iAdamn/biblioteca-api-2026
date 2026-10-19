@@ -30,6 +30,9 @@ describe("registerSchema", () => {
 });
 
 describe("createLoanSchema", () => {
+  it("rechaza rutas en lugar de un identificador de libro", () => {
+    expect(createLoanSchema.safeParse({ bookId: "ruta/invalida", clientRequestId: "request-123" }).success).toBe(false);
+  });
   it("acepta uuid como clientRequestId", () => {
     expect(
       createLoanSchema.safeParse({

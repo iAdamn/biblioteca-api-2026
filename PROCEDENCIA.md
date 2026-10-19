@@ -1,5 +1,11 @@
 # Procedencia y adaptación
 
+## Verificación y ajustes D02 del 19 de octubre
+
+Se conservaron transacciones, máquina de estados, DAL web y OpenAPI docentes. La integración propia confirmó idempotencia simultánea, competencia por el último ejemplar, devolución concurrente, permisos y portadas: 50 controles/47 HTTP sobre Firebase real con fixtures aisladas. No se ejecutó el smoke docente porque su limpieza restaura inventario y elimina portadas de libros existentes; se utilizó un runner local fuera del repositorio que borra únicamente sus fixtures.
+
+Dos fallos reales motivaron cambios mínimos: createLoanSchema ahora restringe bookId a letras ASCII, números, guion y guion bajo (IDs usados por el catálogo), para responder 400 a rutas malformadas en lugar de 500; sniffImageType comprueba los ocho bytes de firma PNG en lugar de cuatro. Dos pruebas de regresión fallaron antes y pasan después. La firma no equivale a decodificar completamente una imagen. Manifiesto y lockfile permanecen intactos.
+
 ## Integración propia D01 del 18 de octubre
 
 Se configuró Firebase exclusivo biblioteca-aiden-2026 y se verificó Auth/Firestore con 27 controles dirigidos, 14 HTTP. No cambió código de producción, dependencias ni lockfile respecto a la base adaptada. Se reutilizaron scripts y rutas existentes, incluida siembra sin reset dos veces. Se actualizaron README y CONFIGURACION_FIREBASE con resultados reales; el JSON de servicio, .env y credenciales técnicas están fuera de Git. Préstamos, portadas y web completa siguen pendientes D02. Helpers/evidencias/Word del estudiante viven fuera del repositorio conforme a la organización del paquete.

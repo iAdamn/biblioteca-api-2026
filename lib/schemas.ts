@@ -22,7 +22,7 @@ export const refreshSchema = z.object({
 });
 
 export const createLoanSchema = z.object({
-  bookId: z.string().min(1).max(120),
+  bookId: z.string().min(1).max(120).regex(/^[A-Za-z0-9_-]+$/, "Identificador de libro inválido"),
   clientRequestId: z
     .string()
     .min(8)

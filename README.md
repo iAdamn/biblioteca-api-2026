@@ -1,6 +1,6 @@
 # Biblioteca · API y sitio web
 
-Base **Next.js 16** (App Router) adaptada para la asignatura *Desarrollo Móvil* (Unidad 03). Estado D01, 18/10/2026: catálogo y autenticación verificados con Firebase propio `biblioteca-aiden-2026`. Pasaron 27 comprobaciones reales, incluidas 14 peticiones HTTP. Préstamos, portadas, web completa por rol y publicación Vercel siguen pendientes de D02. Las funciones presentes en el código no se consideran verificadas por existir.
+Base **Next.js 16** (App Router) adaptada para la asignatura *Desarrollo Móvil* (Unidad 03). Estado D02, 19/10/2026: Firebase propio biblioteca-aiden-2026. Integración de préstamos, transacciones, permisos, idempotencia, catálogo incremental, portadas y OpenAPI: 50/50 controles reales y 47 HTTP. Calidad: 52 tests, tipos, lint y build correctos. Web y despliegue: resultados actualizados al cierre de D02. La app móvil corresponde a un bloque posterior.
 
 1. **API REST** (`/api/...`) prevista para la app móvil Expo, que tendrá un repositorio independiente.
 2. **Sitio web** con las mismas funcionalidades que la app (estudiante y bibliotecario).
@@ -30,7 +30,7 @@ pnpm seed          # carga los 10 libros
 pnpm dev           # http://localhost:3000   (pnpm dev:lan para usarla desde el teléfono)
 ```
 
-**Usuarios:** las cuentas propias de evaluación todavía no están creadas. Los siguientes comandos docentes crean o actualizan cuentas; ejecutarlos solo sobre tu proyecto. Su contraseña puede quedar en el historial y en los argumentos del proceso. Guarda los accesos fuera de Git y evita pegar credenciales en logs o chat:
+**Usuarios:** existen dos cuentas propias de demostración, student y librarian; sus credenciales se conservan exclusivamente en un archivo privado fuera de este repositorio. Los siguientes comandos docentes crean o actualizan cuentas; ejecutarlos solo sobre tu proyecto. Su contraseña puede quedar en el historial y en los argumentos del proceso. Guarda los accesos fuera de Git y evita pegar credenciales en logs o chat:
 
 ```bash
 pnpm create-user -- estudiante@tucorreo.com "TuClave" "Tu Nombre" student
@@ -53,7 +53,7 @@ pnpm create-user -- bibliotecario@tucorreo.com "TuClave" "Tu Nombre" librarian
 | `pnpm smoke` | Prueba de humo contra Firebase real (41 comprobaciones; usa usuarios temporales y limpia todo lo que crea) |
 | `pnpm reset-demo` | Borra préstamos y portadas y restaura ejemplares |
 
-`seed` sin `--reset` conserva libros existentes; `seed -- --reset` puede alterar inventario. `smoke` crea y borra datos temporales, y `reset-demo` es destructivo. Revisar los scripts y el destino antes de ejecutarlos. D01 no ejecutó ninguno contra Firebase.
+`seed` sin `--reset` conserva libros existentes; `seed -- --reset` puede alterar inventario. `smoke` también restaura inventario y elimina portadas de clean-code/rayuela; no usarlo sobre datos que se deban preservar. La integración D02 usa fixtures propias aisladas. `reset-demo` es destructivo. Revisar los scripts y el destino antes de ejecutarlos. D01 no ejecutó ninguno contra Firebase.
 
 ## Verificación local anticipada de D01 en D00
 
@@ -70,7 +70,7 @@ pnpm create-user -- bibliotecario@tucorreo.com "TuClave" "Tu Nombre" librarian
 | `GET /api/openapi.json` · `GET /api/docs` | Público (especificación OpenAPI y Swagger UI) |
 | `GET /api/books/:id/cover` | Público |
 | `PUT /api/books/:id/cover` | Bibliotecario |
-| `GET /api/loans`, `POST /api/loans` (idempotente por `clientRequestId`) | Autenticado / estudiante |
+| `GET /api/loans`, `GET /api/loans/:id`, `POST /api/loans` (idempotente por `clientRequestId`) | Autenticado / estudiante |
 | `PATCH /api/loans/:id` (`approve` · `reject` · `return`) | Bibliotecario |
 
 Errores uniformes: `{ "error": { "code": "NO_COPIES", "message": "…" } }`.
