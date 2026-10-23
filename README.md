@@ -1,8 +1,8 @@
 # Biblioteca · API y sitio web
 
-Base **Next.js 16** (App Router) adaptada para la asignatura *Desarrollo Móvil* (Unidad 03). Estado D02, 19/10/2026: Firebase propio biblioteca-aiden-2026. Integración de préstamos, transacciones, permisos, idempotencia, catálogo incremental, portadas y OpenAPI: 50/50 controles reales y 47 HTTP. Calidad: 52 tests, tipos, lint y build correctos. Web: 19 comprobaciones de navegador. Producción verificada en https://biblioteca-api-2026.vercel.app: 50/50 controles de integración (47 HTTP) y 9/9 de cuentas principales (8 HTTP). La app móvil corresponde a un bloque posterior.
+Base **Next.js 16** (App Router) adaptada para la asignatura *Desarrollo Móvil* (Unidad 03). Estado de entrega D05, 22/10/2026: Firebase propio biblioteca-aiden-2026. Integración de préstamos, transacciones, permisos, idempotencia, catálogo incremental, portadas y OpenAPI: 50/50 controles reales y 47 HTTP. Calidad: 52 tests, tipos, lint y build correctos. Web: 19 comprobaciones de navegador local y 10 en dominio público. Producción verificada en https://biblioteca-api-2026.vercel.app: 50/50 controles de integración (47 HTTP) y 9/9 de cuentas principales (8 HTTP). Repositorio móvil independiente conectado a esta API: [iAdamn/biblioteca-app-2026](https://github.com/iAdamn/biblioteca-app-2026).
 
-1. **API REST** (`/api/...`) prevista para la app móvil Expo, que tendrá un repositorio independiente.
+1. **API REST** (`/api/...`) consumida por la app móvil Expo en su repositorio independiente ([biblioteca-app-2026](https://github.com/iAdamn/biblioteca-app-2026)).
 2. **Sitio web** con las mismas funcionalidades que la app (estudiante y bibliotecario).
 
 Los datos y la autenticación están en **Firebase** (Authentication + Firestore), que solo se usa desde el servidor.
@@ -105,4 +105,4 @@ Para reproducir API: obtener tokens con POST /api/auth/login; enviar Authorizati
 
 Verificación pública: ciclo completo, competencia por el último ejemplar, devolución única, idempotencia simultánea/tardía,403 roles,404 ajenos,400/409, portadas y cursor. Las cuentas principales tienen login/me/rol/listas comprobados; contraseñas solo en la documentación privada de entrega. Pruebas locales:52 casos únicos, con15 afectados reejecutados al corregir prerender; tipos/lint/build correctos.
 
-Límites: validación de imagen por firma/tipo/tamaño, sin decodificación completa. El móvil no se desarrolló en D02. El repositorio se mantiene privado; el acceso docente se resolverá en el cierre de entrega.
+Límites: validación de imagen por firma/tipo/tamaño, sin decodificación completa. La aplicación móvil Expo se entrega en el repositorio independiente [iAdamn/biblioteca-app-2026](https://github.com/iAdamn/biblioteca-app-2026) conectada a este despliegue. Ambos repositorios se publican sin archivos `.env`, claves administrativas ni credenciales de demostración.
